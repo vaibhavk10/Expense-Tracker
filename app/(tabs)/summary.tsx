@@ -41,19 +41,15 @@ export default function SummaryScreen() {
     }));
   };
 
+  const categoryTotals = getCategoryTotals();
+  const totalAmount = categoryTotals.reduce((sum, cat) => sum + cat.total, 0);
+
   const chartData = {
     labels: expenseCategories.map(cat => cat.name.substring(0, 3)),
     datasets: [{
-      data: expenseCategories.map(category => 
-        expenses
-          .filter(expense => expense.category === category.name)
-          .reduce((sum, expense) => sum + expense.amount, 0)
-      )
+      data: categoryTotals.map(cat => cat.total)
     }]
   };
-
-  const categoryTotals = getCategoryTotals();
-  const totalAmount = categoryTotals.reduce((sum, cat) => sum + cat.total, 0);
 
   return (
     <ScrollView style={styles.container}>
@@ -85,7 +81,7 @@ export default function SummaryScreen() {
       </View>
 
       <View style={styles.totalContainer}>
-        <Text style={styles.totalLabel}>Total Expenses</Text>
+        <Text style={styles.totalLabel}>Total Expenses ({timeFrame})</Text>
         <Text style={styles.totalAmount}>${totalAmount.toFixed(2)}</Text>
       </View>
 
