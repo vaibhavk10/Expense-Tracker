@@ -1,84 +1,68 @@
-# Personal Expense Tracker
+# 📱 Personal Expense Tracker
 
-A React Native mobile application for tracking personal expenses with features like expense categorization, summaries, and visualization.
+A clean and modern React Native mobile app for tracking your personal expenses. Easily add, view, and categorize expenses — all in one place!
 
-## Features
+## 🌟 Features
 
-- Add new expenses with amount, category, and date
-- View expense summary by category
-- Recent expenses list
-- Clean and modern UI
-- Cross-platform (iOS & Android)
+- Add new expenses (amount, category, date)  
+- Summary of expenses by category  
+- Recent expenses list  
+- Beautiful and responsive UI  
+- Cross-platform support (Android & iOS)
 
-## Prerequisites
+## 🛠️ Tech Stack
 
-Before you begin, ensure you have the following installed:
-- [Node.js](https://nodejs.org/) (v14 or newer)
-- [Git](https://git-scm.com/)
-- [VS Code](https://code.visualstudio.com/) (or any preferred code editor)
-- [Expo CLI](https://docs.expo.dev/get-started/installation/)
+- React Native (via Expo)  
+- TypeScript  
+- React Navigation  
+- React Native Picker  
+- SQLite (for future persistence)  
+- Expo Vector Icons
 
-## Installation Steps
+## 🚀 Getting Started
 
-1. **Create a new project directory and clone the repository**
-   ```bash
-   mkdir expense-tracker
-   cd expense-tracker
-   git init
-   ```
+Follow these steps to set up the project locally:
 
-2. **Initialize a new Expo project**
-   ```bash
-   npx create-expo-app .
-   ```
+### 1. Clone the Repository
 
-3. **Install required dependencies**
-   ```bash
-   npx expo install @react-navigation/native @react-navigation/native-stack
-   npx expo install react-native-screens react-native-safe-area-context
-   npx expo install @react-native-picker/picker
-   npx expo install @react-native-community/datetimepicker
-   npx expo install react-native-sqlite-storage
-   npx expo install @expo/vector-icons
-   npx expo install sonner-native
-   ```
+```bash
+git clone https://github.com/vaibhavk10/Expense-Tracker.git
+cd Expense-Tracker
+```
 
-4. **Configure the project structure**
-   Create the following directories:
-   ```bash
-   mkdir src
-   cd src
-   mkdir components
-   mkdir screens
-   mkdir constants
-   ```
+### 2. Install Dependencies
 
-5. **Copy the project files**
-   - Copy all the provided component files into their respective directories
-   - Ensure the file structure matches the imports
+```bash
+npm install
+```
 
-6. **Start the development server**
-   ```bash
-   npx expo start
-   ```
+### 3. Start the Development Server
 
-7. **Running on different platforms**
-   - Press `i` to run on iOS simulator (requires macOS and Xcode)
-   - Press `a` to run on Android emulator (requires Android Studio)
-   - Scan the QR code with Expo Go app on your physical device
+```bash
+npx expo start
+```
 
-## Troubleshooting
+### 4. Run the App
 
-If you encounter any issues:
-- Ensure all dependencies are properly installed
-- Clear the Metro bundler cache: `npx expo start -c`
-- Make sure your development environment meets Expo's requirements
-- Check that all imports are correct and files are in their proper locations
+- Press `a` to launch Android emulator  
+- Press `i` for iOS simulator (macOS only)  
+- Or scan the QR code using the **Expo Go** app on your phone
 
-## Contributing
+## 📦 Dependencies Used
 
-Feel free to submit issues and enhancement requests!
+```bash
+npx expo install @react-navigation/native @react-navigation/native-stack
+npx expo install react-native-screens react-native-safe-area-context
+npx expo install @react-native-picker/picker
+npx expo install @react-native-community/datetimepicker
+npx expo install react-native-sqlite-storage
+npx expo install @expo/vector-icons
+npx expo install sonner-native
+```
+## 📜 License
 
-## License
+MIT License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+---
+
+Made with ❤️ by [Vaibhav Kumawat](https://github.com/vaibhavk10)
