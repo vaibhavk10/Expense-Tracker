@@ -20,6 +20,7 @@ export default function TabLayout() {
           fontSize: 20,
           fontWeight: 'bold',
         },
+        headerTitleAlign: 'center',
       }}
     >
       <Tabs.Screen

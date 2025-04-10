@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import Header from '../../components/Header';
-import Footer from '../../components/Footer';
 import ExpenseSummary from '../../components/ExpenseSummary';
 import ExpenseForm from '../../components/ExpenseForm';
 import ExpenseList from '../../components/ExpenseList';
@@ -13,6 +11,11 @@ interface Expense {
   amount: number;
   category: string;
   date: string;
+}
+
+interface Category {
+  name: string;
+  color: string;
 }
 
 export default function HomeScreen() {
@@ -27,7 +30,7 @@ export default function HomeScreen() {
   };
 
   const getTotalByCategory = () => {
-    return expenseCategories.map(category => ({
+    return expenseCategories.map((category: Category) => ({
       category: category.name,
       total: expenses
         .filter(expense => expense.category === category.name)
@@ -37,15 +40,13 @@ export default function HomeScreen() {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <Header />
-      <ScrollView style={styles.scrollView}>
+    <View style={styles.container}>
+      <ScrollView style={styles.scrollView} contentContainerStyle={styles.scrollContent}>
         <ExpenseSummary data={getTotalByCategory()} />
         <ExpenseForm onSubmit={addExpense} />
         <ExpenseList expenses={expenses} />
       </ScrollView>
-      <Footer />
-    </SafeAreaView>
+    </View>
   );
 }
 
@@ -56,5 +57,8 @@ const styles = StyleSheet.create({
   },
   scrollView: {
     flex: 1
+  },
+  scrollContent: {
+    paddingBottom: 20
   }
 });

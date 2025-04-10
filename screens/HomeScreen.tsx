@@ -11,7 +11,6 @@ import { expenseCategories } from '../constants/categories';
 export default function HomeScreen() {
   const [expenses, setExpenses] = useState([
     { id: '1', amount: 25.99, category: 'Food', date: new Date().toISOString() },
-    { id: '2', amount: 45.00, category: 'Transport', date: new Date().toISOString() },
     { id: '3', amount: 100.00, category: 'Shopping', date: new Date().toISOString() }
   ]);
 
