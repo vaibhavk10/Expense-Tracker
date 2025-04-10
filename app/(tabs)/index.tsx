@@ -1,17 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { View, StyleSheet, ScrollView } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import ExpenseSummary from '../../components/ExpenseSummary';
 import ExpenseForm from '../../components/ExpenseForm';
 import ExpenseList from '../../components/ExpenseList';
 import { expenseCategories } from '../../constants/categories';
-
-interface Expense {
-  id: string;
-  amount: number;
-  category: string;
-  date: string;
-}
+import { useExpenses } from '../../context/ExpenseContext';
 
 interface Category {
   name: string;
@@ -19,15 +12,7 @@ interface Category {
 }
 
 export default function HomeScreen() {
-  const [expenses, setExpenses] = useState<Expense[]>([
-    { id: '1', amount: 25.99, category: 'Food', date: new Date().toISOString() },
-    { id: '2', amount: 45.00, category: 'Transport', date: new Date().toISOString() },
-    { id: '3', amount: 100.00, category: 'Shopping', date: new Date().toISOString() }
-  ]);
-
-  const addExpense = (newExpense: Omit<Expense, 'id'>) => {
-    setExpenses(prev => [...prev, { ...newExpense, id: Date.now().toString() }]);
-  };
+  const { expenses, addExpense } = useExpenses();
 
   const getTotalByCategory = () => {
     return expenseCategories.map((category: Category) => ({

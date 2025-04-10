@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import ExpenseForm from '../../components/ExpenseForm';
 import { useRouter } from 'expo-router';
+import { useExpenses } from '../../context/ExpenseContext';
 
-interface Expense {
-  id: string;
+interface NewExpense {
   amount: number;
   category: string;
   date: string;
@@ -12,10 +12,10 @@ interface Expense {
 
 export default function AddScreen() {
   const router = useRouter();
-  const [expenses, setExpenses] = useState<Expense[]>([]);
+  const { addExpense } = useExpenses();
 
-  const handleSubmit = (newExpense: Omit<Expense, 'id'>) => {
-    setExpenses(prev => [...prev, { ...newExpense, id: Date.now().toString() }]);
+  const handleSubmit = (newExpense: NewExpense) => {
+    addExpense(newExpense);
     router.back();
   };
 
