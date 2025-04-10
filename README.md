@@ -1,50 +1,84 @@
-# Welcome to your Expo app 👋
+# Personal Expense Tracker
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+A React Native mobile application for tracking personal expenses with features like expense categorization, summaries, and visualization.
 
-## Get started
+## Features
 
-1. Install dependencies
+- Add new expenses with amount, category, and date
+- View expense summary by category
+- Recent expenses list
+- Clean and modern UI
+- Cross-platform (iOS & Android)
 
+## Prerequisites
+
+Before you begin, ensure you have the following installed:
+- [Node.js](https://nodejs.org/) (v14 or newer)
+- [Git](https://git-scm.com/)
+- [VS Code](https://code.visualstudio.com/) (or any preferred code editor)
+- [Expo CLI](https://docs.expo.dev/get-started/installation/)
+
+## Installation Steps
+
+1. **Create a new project directory and clone the repository**
    ```bash
-   npm install
+   mkdir expense-tracker
+   cd expense-tracker
+   git init
    ```
 
-2. Start the app
-
+2. **Initialize a new Expo project**
    ```bash
-    npx expo start
+   npx create-expo-app .
    ```
 
-In the output, you'll find options to open the app in a
+3. **Install required dependencies**
+   ```bash
+   npx expo install @react-navigation/native @react-navigation/native-stack
+   npx expo install react-native-screens react-native-safe-area-context
+   npx expo install @react-native-picker/picker
+   npx expo install @react-native-community/datetimepicker
+   npx expo install react-native-sqlite-storage
+   npx expo install @expo/vector-icons
+   npx expo install sonner-native
+   ```
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+4. **Configure the project structure**
+   Create the following directories:
+   ```bash
+   mkdir src
+   cd src
+   mkdir components
+   mkdir screens
+   mkdir constants
+   ```
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+5. **Copy the project files**
+   - Copy all the provided component files into their respective directories
+   - Ensure the file structure matches the imports
 
-## Get a fresh project
+6. **Start the development server**
+   ```bash
+   npx expo start
+   ```
 
-When you're ready, run:
+7. **Running on different platforms**
+   - Press `i` to run on iOS simulator (requires macOS and Xcode)
+   - Press `a` to run on Android emulator (requires Android Studio)
+   - Scan the QR code with Expo Go app on your physical device
 
-```bash
-npm run reset-project
-```
+## Troubleshooting
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+If you encounter any issues:
+- Ensure all dependencies are properly installed
+- Clear the Metro bundler cache: `npx expo start -c`
+- Make sure your development environment meets Expo's requirements
+- Check that all imports are correct and files are in their proper locations
 
-## Learn more
+## Contributing
 
-To learn more about developing your project with Expo, look at the following resources:
+Feel free to submit issues and enhancement requests!
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+## License
 
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+This project is licensed under the MIT License - see the LICENSE file for details.
