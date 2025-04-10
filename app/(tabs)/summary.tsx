@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Dimensions, Modal } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Dimensions, Modal, Animated } from 'react-native';
 import { useExpenses } from '../../context/ExpenseContext';
 import { expenseCategories } from '../../constants/categories';
 import { BarChart } from 'react-native-chart-kit';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import { useFocusEffect } from '@react-navigation/native';
 
 type TimeFrame = 'day' | 'week' | 'month' | 'custom';
 
@@ -15,6 +16,40 @@ export default function SummaryScreen() {
   const [datePickerMode, setDatePickerMode] = useState<'start' | 'end'>('start');
   const [startDate, setStartDate] = useState(new Date(new Date().setDate(new Date().getDate() - 7)));
   const [endDate, setEndDate] = useState(new Date());
+  const [animation] = useState(new Animated.Value(0));
+
+  const [barHeights] = useState(expenseCategories.map(() => new Animated.Value(0)));
+  const [animatedValues] = useState(expenseCategories.map(() => new Animated.Value(0)));
+
+  useFocusEffect(
+    React.useCallback(() => {
+      // Reset and animate each bar
+      barHeights.forEach((anim, index) => {
+        anim.setValue(0);
+        Animated.timing(anim, {
+          toValue: 1,
+          duration: 1000,
+          delay: index * 100, // Stagger the animations
+          useNativeDriver: true,
+        }).start();
+      });
+    }, [timeFrame, selectedCategories]) // Re-run when filters change
+  );
+
+  useFocusEffect(
+    React.useCallback(() => {
+      // Animate each bar individually
+      animatedValues.forEach((anim, index) => {
+        anim.setValue(0);
+        Animated.timing(anim, {
+          toValue: 1,
+          duration: 1000,
+          delay: index * 100, // Stagger animation for each bar
+          useNativeDriver: true,
+        }).start();
+      });
+    }, [timeFrame, selectedCategories])
+  );
 
   const getFilteredExpenses = (frame: TimeFrame) => {
     const now = new Date();
@@ -90,9 +125,22 @@ export default function SummaryScreen() {
   const chartData = {
     labels: categoryTotals.map(cat => cat.name.substring(0, 3)),
     datasets: [{
-      data: categoryTotals.map(cat => cat.total)
+      data: categoryTotals.map(cat => cat.total),
+      colors: categoryTotals.map(cat => () => cat.color)
     }]
   };
+
+  useFocusEffect(
+    React.useCallback(() => {
+      // Reset and start animation when tab is focused or filters change
+      animation.setValue(0);
+      Animated.timing(animation, {
+        toValue: 1,
+        duration: 1000,
+        useNativeDriver: true,
+      }).start();
+    }, [timeFrame, selectedCategories])
+  );
 
   return (
     <ScrollView style={styles.container}>
@@ -175,38 +223,56 @@ export default function SummaryScreen() {
       <View style={styles.chartContainer}>
         <Text style={styles.sectionTitle}>Expense Chart</Text>
         {categoryTotals.length > 0 ? (
-          <BarChart
-            data={chartData}
-            width={Dimensions.get('window').width - 32}
-            height={220}
-            yAxisLabel="$"
-            yAxisSuffix=""
-            chartConfig={{
-              backgroundColor: '#ffffff',
-              backgroundGradientFrom: '#ffffff',
-              backgroundGradientTo: '#ffffff',
-              decimalPlaces: 0,
-              color: (opacity = 1) => `rgba(0, 122, 255, ${opacity})`,
-              labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
-              style: {
-                borderRadius: 16,
-              },
-              barPercentage: 0.7,
-              propsForLabels: {
-                fontSize: 12,
-                rotation: 45,
-              }
-            }}
-            style={styles.chart}
-            showValuesOnTopOfBars
-            fromZero
-          />
+          <Animated.View style={{
+            transform: [{
+              scaleY: animation
+            }],
+            height: 220,
+            alignItems: 'stretch'
+          }}>
+            <BarChart
+              data={chartData}
+              width={Dimensions.get('window').width - 32}
+              height={220}
+              yAxisLabel="$"
+              yAxisSuffix=""
+              chartConfig={{
+                backgroundColor: '#ffffff',
+                backgroundGradientFrom: '#ffffff',
+                backgroundGradientTo: '#ffffff',
+                decimalPlaces: 0,
+                color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+                labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+                barPercentage: 0.7,
+                propsForLabels: {
+                  fontSize: 12,
+                  rotation: 45,
+                }
+              }}
+              withCustomBarColorFromData={true}
+              flatColor={true}
+              style={styles.chart}
+              showValuesOnTopOfBars
+              fromZero
+            />
+          </Animated.View>
         ) : (
           <Text style={styles.noDataText}>No expenses for selected filters</Text>
         )}
       </View>
 
-      <View style={styles.categoriesList}>
+      <Animated.View style={[
+        styles.categoriesList,
+        {
+          transform: [{
+            translateY: animation.interpolate({
+              inputRange: [0, 1],
+              outputRange: [200, 0]
+            })
+          }],
+          opacity: animation
+        }
+      ]}>
         <Text style={styles.sectionTitle}>Expenses by Category</Text>
         {categoryTotals.map(category => (
           <View key={category.name} style={styles.categoryItem}>
@@ -217,7 +283,7 @@ export default function SummaryScreen() {
             <Text style={styles.categoryAmount}>${category.total.toFixed(2)}</Text>
           </View>
         ))}
-      </View>
+      </Animated.View>
 
       {showDatePicker && (
         <DateTimePicker
