@@ -86,7 +86,6 @@ npx expo start
 </table>
 
 <hr>
----
 
 ## 📜 License
 
