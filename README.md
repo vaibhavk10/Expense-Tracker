@@ -60,28 +60,32 @@ npx expo start
 
 ---
 
-## 📦 Dependency List
+<h2>📸 Screenshots</h2>
 
-```bash
-npx expo install @react-navigation/native @react-navigation/native-stack
-npx expo install react-native-screens react-native-safe-area-context
-npx expo install @react-native-picker/picker
-npx expo install @react-native-community/datetimepicker
-npx expo install react-native-sqlite-storage
-npx expo install @expo/vector-icons
-npx expo install sonner-native
-```
+<table>
+  <tr>
+    <th>Home Screen</th>
+    <th>Expenses</th>
+    <th>Summary</th>
+  </tr>
+  <tr>
+    <td><img src="./assets/images/home.jpg" alt="Home Screen" width="200"></td>
+    <td><img src="./assets/images/expenses.jpg" alt="Expenses" width="200"></td>
+    <td><img src="./assets/images/summary1.jpg" alt="Summary" width="200"></td>
+  </tr>
+  <tr>
+    <th>Summary detail</th>
+    <th>Budget</th>
+    <th>Notification</th>
+  </tr>
+  <tr>
+    <td><img src="./assets/images/summary2.jpg" alt="Summary Detail" width="200"></td>
+    <td><img src="./assets/images/budget.jpg" alt="Budget" width="200"></td>
+    <td><img src="./assets/images/notification.jpg" alt="Notifications" width="200"></td>
+  </tr>
+</table>
 
----
-
-## 📸 UI Screenshots
-
-<p float="left">
-  <img src="https://user-images.githubusercontent.com/0000000/expense-tracker-screen1.png" width="200"/>
-  <img src="https://user-images.githubusercontent.com/0000000/expense-tracker-screen2.png" width="200"/>
-  <img src="https://user-images.githubusercontent.com/0000000/expense-tracker-screen3.png" width="200"/>
-</p>
-
+<hr>
 ---
 
 ## 📜 License
