@@ -13,15 +13,15 @@ export default function Footer() {
         onPress={() => navigation.navigate('Home')}
       >
         <Ionicons name="home" size={24} color="#007AFF" />
-        <Text style={styles.tabText}>Home </Text>
+        <Text style={styles.tabText}>Home</Text>
       </TouchableOpacity>
 
       <TouchableOpacity 
         style={styles.tab}
-        onPress={() => navigation.navigate('AddExpense')}
+        onPress={() => navigation.navigate('Expenses')}
       >
-        <Ionicons name="add-circle" size={24} color="#007AFF" />
-        <Text style={styles.tabText}>Add </Text>
+        <Ionicons name="list" size={24} color="#007AFF" />
+        <Text style={styles.tabText}>Expenses</Text>
       </TouchableOpacity>
 
       <TouchableOpacity 
@@ -29,7 +29,7 @@ export default function Footer() {
         onPress={() => navigation.navigate('Summary')}
       >
         <Ionicons name="stats-chart" size={24} color="#007AFF" />
-        <Text style={styles.tabText}>Summary </Text>
+        <Text style={styles.tabText}>Summary</Text>
       </TouchableOpacity>
     </View>
   );

@@ -33,12 +33,12 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="add"
+        name="expenses"
         options={{
-          title: 'Add Expense',
-          headerTitle: 'Add Expense',
-          tabBarIcon: ({ color }) => <Ionicons name="add-circle" size={24} color={color} />,
-          tabBarLabel: 'Add'
+          title: 'All Expenses',
+          headerTitle: 'All Expenses',
+          tabBarIcon: ({ color }) => <Ionicons name="list" size={24} color={color} />,
+          tabBarLabel: 'Expenses'
         }}
       />
       <Tabs.Screen
