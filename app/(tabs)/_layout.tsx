@@ -50,6 +50,15 @@ export default function TabLayout() {
           tabBarLabel: 'Summary'
         }}
       />
+      <Tabs.Screen
+        name="budget"
+        options={{
+          title: 'Budget Settings',
+          headerTitle: 'Budget Settings',
+          tabBarIcon: ({ color }) => <Ionicons name="wallet" size={24} color={color} />,
+          tabBarLabel: 'Budget'
+        }}
+      />
     </Tabs>
   );
 }

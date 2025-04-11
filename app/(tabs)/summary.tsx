@@ -1,25 +1,18 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Dimensions, Modal, Animated } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Dimensions, Animated } from 'react-native';
 import { useExpenses } from '../../context/ExpenseContext';
 import { expenseCategories } from '../../constants/categories';
 import { BarChart } from 'react-native-chart-kit';
-import DateTimePicker from '@react-native-community/datetimepicker';
 import { useFocusEffect } from '@react-navigation/native';
 
-type TimeFrame = 'day' | 'week' | 'month' | 'custom';
+type TimeFrame = 'day' | 'week' | 'month' | 'year';
 
 export default function SummaryScreen() {
   const { expenses } = useExpenses();
   const [timeFrame, setTimeFrame] = useState<TimeFrame>('week');
   const [selectedCategories, setSelectedCategories] = useState<string[]>(expenseCategories.map(cat => cat.name));
-  const [showDatePicker, setShowDatePicker] = useState(false);
-  const [datePickerMode, setDatePickerMode] = useState<'start' | 'end'>('start');
-  const [startDate, setStartDate] = useState(new Date(new Date().setDate(new Date().getDate() - 7)));
-  const [endDate, setEndDate] = useState(new Date());
   const [animation] = useState(new Animated.Value(0));
-
   const [barHeights] = useState(expenseCategories.map(() => new Animated.Value(0)));
-  const [animatedValues] = useState(expenseCategories.map(() => new Animated.Value(0)));
 
   useFocusEffect(
     React.useCallback(() => {
@@ -29,25 +22,18 @@ export default function SummaryScreen() {
         Animated.timing(anim, {
           toValue: 1,
           duration: 1000,
-          delay: index * 100, // Stagger the animations
+          delay: index * 100,
           useNativeDriver: true,
         }).start();
       });
-    }, [timeFrame, selectedCategories]) // Re-run when filters change
-  );
 
-  useFocusEffect(
-    React.useCallback(() => {
-      // Animate each bar individually
-      animatedValues.forEach((anim, index) => {
-        anim.setValue(0);
-        Animated.timing(anim, {
-          toValue: 1,
-          duration: 1000,
-          delay: index * 100, // Stagger animation for each bar
-          useNativeDriver: true,
-        }).start();
-      });
+      // Animate the entire view
+      animation.setValue(0);
+      Animated.timing(animation, {
+        toValue: 1,
+        duration: 1000,
+        useNativeDriver: true,
+      }).start();
     }, [timeFrame, selectedCategories])
   );
 
@@ -56,12 +42,10 @@ export default function SummaryScreen() {
     let filtered = expenses.filter(expense => {
       const expenseDate = new Date(expense.date);
       
-      // First apply category filter
       if (!selectedCategories.includes(expense.category)) {
         return false;
       }
 
-      // Then apply date filter
       switch (frame) {
         case 'day':
           return expenseDate.toDateString() === now.toDateString();
@@ -71,8 +55,8 @@ export default function SummaryScreen() {
         case 'month':
           return expenseDate.getMonth() === now.getMonth() &&
                  expenseDate.getFullYear() === now.getFullYear();
-        case 'custom':
-          return expenseDate >= startDate && expenseDate <= endDate;
+        case 'year':
+          return expenseDate.getFullYear() === now.getFullYear();
         default:
           return true;
       }
@@ -88,22 +72,6 @@ export default function SummaryScreen() {
         return [...prev, category];
       }
     });
-  };
-
-  const handleDateChange = (event: any, selectedDate?: Date) => {
-    setShowDatePicker(false);
-    if (selectedDate) {
-      if (datePickerMode === 'start') {
-        setStartDate(selectedDate);
-      } else {
-        setEndDate(selectedDate);
-      }
-    }
-  };
-
-  const showDateSelection = (mode: 'start' | 'end') => {
-    setDatePickerMode(mode);
-    setShowDatePicker(true);
   };
 
   const getCategoryTotals = () => {
@@ -129,18 +97,6 @@ export default function SummaryScreen() {
       colors: categoryTotals.map(cat => () => cat.color)
     }]
   };
-
-  useFocusEffect(
-    React.useCallback(() => {
-      // Reset and start animation when tab is focused or filters change
-      animation.setValue(0);
-      Animated.timing(animation, {
-        toValue: 1,
-        duration: 1000,
-        useNativeDriver: true,
-      }).start();
-    }, [timeFrame, selectedCategories])
-  );
 
   return (
     <ScrollView style={styles.container}>
@@ -170,27 +126,14 @@ export default function SummaryScreen() {
           </Text>
         </TouchableOpacity>
         <TouchableOpacity 
-          style={[styles.timeButton, timeFrame === 'custom' && styles.activeTimeButton]}
-          onPress={() => setTimeFrame('custom')}
+          style={[styles.timeButton, timeFrame === 'year' && styles.activeTimeButton]}
+          onPress={() => setTimeFrame('year')}
         >
-          <Text style={[styles.timeButtonText, timeFrame === 'custom' && styles.activeTimeButtonText]}>
-            Custom
+          <Text style={[styles.timeButtonText, timeFrame === 'year' && styles.activeTimeButtonText]}>
+            Year
           </Text>
         </TouchableOpacity>
       </View>
-
-      {timeFrame === 'custom' && (
-        <View style={styles.dateRangeContainer}>
-          <TouchableOpacity style={styles.dateButton} onPress={() => showDateSelection('start')}>
-            <Text style={styles.dateButtonLabel}>Start Date:</Text>
-            <Text style={styles.dateButtonText}>{startDate.toLocaleDateString()}</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.dateButton} onPress={() => showDateSelection('end')}>
-            <Text style={styles.dateButtonLabel}>End Date:</Text>
-            <Text style={styles.dateButtonText}>{endDate.toLocaleDateString()}</Text>
-          </TouchableOpacity>
-        </View>
-      )}
 
       <View style={styles.categoryFilterContainer}>
         <Text style={styles.filterTitle}>Filter Categories:</Text>
@@ -257,7 +200,7 @@ export default function SummaryScreen() {
             />
           </Animated.View>
         ) : (
-          <Text style={styles.noDataText}>No expenses for selected filters</Text>
+          <Text style={styles.noDataText}>No expenses to display</Text>
         )}
       </View>
 
@@ -284,16 +227,6 @@ export default function SummaryScreen() {
           </View>
         ))}
       </Animated.View>
-
-      {showDatePicker && (
-        <DateTimePicker
-          value={datePickerMode === 'start' ? startDate : endDate}
-          mode="date"
-          display="default"
-          onChange={handleDateChange}
-          maximumDate={new Date()}
-        />
-      )}
     </ScrollView>
   );
 }
@@ -327,30 +260,6 @@ const styles = StyleSheet.create({
   },
   activeTimeButtonText: {
     color: 'white',
-  },
-  dateRangeContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    padding: 16,
-    backgroundColor: 'white',
-    marginBottom: 8,
-  },
-  dateButton: {
-    flex: 1,
-    marginHorizontal: 4,
-    padding: 8,
-    backgroundColor: '#f0f0f0',
-    borderRadius: 8,
-  },
-  dateButtonLabel: {
-    fontSize: 12,
-    color: '#666',
-    marginBottom: 4,
-  },
-  dateButtonText: {
-    fontSize: 14,
-    color: '#007AFF',
-    fontWeight: '600',
   },
   categoryFilterContainer: {
     backgroundColor: 'white',
